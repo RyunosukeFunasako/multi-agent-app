@@ -1,6 +1,11 @@
 import streamlit as st
 import time
+
 if st.session_state.current_page == "quality":
+    with st.sidebar:
+        st.markdown(f"### 実験の進度")
+        st.progress(5 / 5)
+
     # qualityアンケート画面
     st.title("対話システムとしての評価")
     st.write("カウンセラーエージェントの「対話の質」を測る質問に回答していただきます。  \n0を「全くそう思わない」、10を「全くそう思う」として、0~10点で評価してください。")

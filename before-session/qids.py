@@ -1,6 +1,11 @@
 import streamlit as st
 import time
+
 if st.session_state.current_page == "qids":
+    with st.sidebar:
+        st.markdown(f"### 実験の進度")
+        st.progress(1 / 5)
+
     # QIDSアンケート画面
     st.title("抑うつ症状の検査")
     st.write("簡易抑うつ症状尺度の質問（QIDS-J）に回答していただきます。  \n以下の各項目について、最も当てはまるものを1つ選んでください。")

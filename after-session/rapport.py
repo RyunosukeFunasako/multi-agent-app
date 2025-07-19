@@ -2,6 +2,10 @@ import streamlit as st
 import time
 
 if st.session_state.current_page == "rapport":
+    with st.sidebar:
+        st.markdown(f"### 実験の進度")
+        st.progress(4 / 5)
+
     # rapportアンケート画面
     st.title("カウンセラーとしての評価")
     st.write("カウンセラーエージェントとの「信頼関係」を測る質問に回答していただきます。  \n各項目について1~5点で評価してください。")

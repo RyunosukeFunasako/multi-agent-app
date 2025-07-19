@@ -124,6 +124,8 @@ if st.session_state.current_page == "dialogue":
 
     # サイドバーにターン進捗を表示
     with st.sidebar:
+        st.markdown(f"### 実験の進度")
+        st.progress(2 / 5)
         st.markdown(f"### 対話セッションの進捗")
         st.progress(st.session_state.counselor_turn / len(scenario_data))
         st.markdown(f"**{st.session_state.counselor_turn + 1} / {len(scenario_data)} ターン**")
@@ -142,7 +144,7 @@ if st.session_state.current_page == "dialogue":
             # 1ターン目はシナリオ通りの発話を使用
             if st.session_state.counselor_turn == 0:
                 # 表示を遅らせる
-                time.sleep(1)
+                time.sleep(2)
                 counselor_reply = counselor_scenario_message
             # 2ターン目以降はカウンセラーエージェントの発話を生成
             else:

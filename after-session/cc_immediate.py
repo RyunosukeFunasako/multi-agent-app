@@ -2,6 +2,10 @@ import streamlit as st
 import time
 
 if st.session_state.current_page == "cc_immediate":
+    with st.sidebar:
+        st.markdown(f"### 実験の進度")
+        st.progress(3 / 5)
+
     # CC-immediateアンケート画面
     st.title("認知の変化の回答")
     st.write("認知の即時的変化を測る質問（CC-immediate）に回答していただきます。  \n対話セッションに対してどのように感じたか、次の尺度を使ってお答えください。")
