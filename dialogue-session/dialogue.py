@@ -127,7 +127,7 @@ if st.session_state.current_page == "dialogue":
         st.markdown(f"### 実験の進度")
         st.progress(2 / 5)
         st.markdown(f"### 対話セッションの進捗")
-        st.progress(st.session_state.counselor_turn / len(scenario_data))
+        st.progress((st.session_state.counselor_turn + 1) / len(scenario_data))
         st.markdown(f"**{st.session_state.counselor_turn + 1} / {len(scenario_data)} ターン**")
     
     # 対話履歴を表示し続ける
