@@ -14,10 +14,10 @@ def generate_counselor_message(counselor_scenario_message, dialogue_history, ope
 - 基本的に発話シナリオに沿って、自然な発話を生成する。
 - 患者が症状に関する返答をした場合は、発話のはじめに繰り返し（言い換え）や共感的な声かけを1文で簡潔に行う。
   - 例：「〇〇ということですね。」「それは〇〇ですね。」
-- 必要に応じて発話シナリオの表現を修正して良いが、各ターンの発話シナリオの内容は生成する発話に必ず含める。
+- 各ターンの発話シナリオの内容は生成する発話に必ず含める。
 - 発話シナリオに含まれない質問や提案はしない。
 - 指示をするような断定的な発話はしない。
-  - 例：「まずは〇〇することが大切です。」などの指示的な発話はしない。
+  - 例：「まずは〇〇することが大切です。」などの発話はしない。
 - 患者からの質問には回答しながらも、発話シナリオからは逸脱しない。
 
 # 今回のターン{turn}の発話シナリオ：
@@ -48,7 +48,7 @@ def check_generated_message(counselor_reply, counselor_scenario_message):
 - 発話シナリオに含まれる説明が省略されていないか確認する。
   - 例：アジェンダや自動思考、認知再構成の説明が省略されていないか確認する。
 - 発話シナリオに含まれない質問や提案をしていないか確認する。
-- 完全一致している必要はなく、相槌や表現の違いは気にしない。
+- 相槌や表現の違いは気にしない。
 - 直前の患者の返答に対する繰り返し（言い換え）や共感的な声かけが追加されていることは問題ない。
 """
     # 評価結果はboolで返す
@@ -111,7 +111,7 @@ if st.session_state.current_page == "dialogue":
 
     openai = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
     model = "gpt-4o-mini"
-    scenario_file = "dialogue-session/counselor_scenario_message_only.json"
+    scenario_file = "dialogue-session/counselor_scenario_ver2.json"
 
     if "counselor_turn" not in st.session_state:
         st.session_state.counselor_turn = 0
@@ -126,7 +126,7 @@ if st.session_state.current_page == "dialogue":
     with st.sidebar:
         st.markdown(f"### 実験の進度")
         st.progress(2 / 5)
-        st.markdown(f"### 対話セッションの進捗")
+        st.markdown(f"### 対話セッションの進度")
         st.progress((st.session_state.counselor_turn + 1) / len(scenario_data))
         st.markdown(f"**{st.session_state.counselor_turn + 1} / {len(scenario_data)} ターン**")
     
@@ -197,6 +197,7 @@ if st.session_state.current_page == "dialogue":
     
     # 23ターン終了
     else:
+        time.sleep(1)
         st.success("これで対話セッションは終了です。")
         if st.button("「認知の変化の回答」に進む"):
             st.session_state.current_page = "cc_immediate"
