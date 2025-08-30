@@ -38,7 +38,7 @@ def generate_counselor_message(counselor_scenario_message, dialogue_history, ope
     return counselor_reply
 
 # 生成された発話を評価する関数
-def check_generated_message(counselor_reply, counselor_scenario_message):
+def check_generated_message(previous_user_message, counselor_reply, counselor_scenario_message):
     check_prompt = f"""
 # 命令書：
 あなたはカウンセラーエージェントが生成した発話を管理するエージェントです。
@@ -63,7 +63,11 @@ def check_generated_message(counselor_reply, counselor_scenario_message):
             {
                 "role": "user",
                 "content": f"""
-以下はカウンセラーエージェントが生成した発話と発話シナリオです。
+以下は直前の患者の発話、カウンセラーエージェントが生成した発話、発話シナリオです。
+制約条件をもとにカウンセラーエージェントが生成した発話が、発話シナリオの内容を全て含んでいるかを評価してください。
+
+# 直前の患者の発話：
+{previous_user_message}
 
 # カウンセラーエージェントの発話：
 {counselor_reply}
@@ -153,12 +157,15 @@ if st.session_state.current_page == "dialogue":
                 retry_count = 0
                 max_retries = 2
                 while retry_count < max_retries:
+                    # 直前の患者の発話
+                    previous_user_message = st.session_state.dialogue_history[-1]["content"]
+
                     counselor_reply = generate_counselor_message(counselor_scenario_message, st.session_state.dialogue_history, openai, model, st.session_state.counselor_turn, scenario_data)
                     # チェックはboolが返ってくるまで何回でも行う
                     check_result = None
                     while not isinstance(check_result, bool):
                         try:
-                            check_result = check_generated_message(counselor_reply, counselor_scenario_message)
+                            check_result = check_generated_message(previous_user_message, counselor_reply, counselor_scenario_message)
                         except Exception as e:
                             print(f"チェックエラーが発生しました。再試行します: {e}")
                     if check_result:
