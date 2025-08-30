@@ -12,7 +12,7 @@ def generate_counselor_message(counselor_scenario_message, dialogue_history, ope
 
 # 制約条件：
 - 基本的に発話シナリオに沿って、自然な発話を生成する。
-- 患者が症状に関する返答をした場合は、発話の冒頭に繰り返し（言い換え）や共感的な声かけを簡潔に行う。
+- 発話の冒頭で患者の返答に対する繰り返し（言い換え）や共感的な声かけを1文で簡潔に行う。
   - 例：「〇〇ということですね。」「それは〇〇ですね。」
 - 各ターンの発話シナリオの内容は生成する発話に必ず含める。
 - 発話シナリオに含まれる説明や具体例は省略しない。
@@ -21,7 +21,7 @@ def generate_counselor_message(counselor_scenario_message, dialogue_history, ope
 - 指示をするような断定的な発話はしない。
   - 例：「まずは〇〇することが大切です。」などの発話はしない。
 
-# 今回のターン{turn}の発話シナリオ：
+# 今回のターン{turn+1}の発話シナリオ：
 {counselor_scenario_message}
 
 # 発話シナリオ一覧：
@@ -176,11 +176,13 @@ if st.session_state.current_page == "dialogue":
                             print(f"ターン{st.session_state.counselor_turn+1}: 発話がシナリオから逸脱しています。再生成します。（{retry_count}/{max_retries}）")
                             st.session_state.deviation_history.append(f"ターン{st.session_state.counselor_turn+1}: 発話がシナリオから逸脱しています。再生成します。（{retry_count}/{max_retries}）")
                             st.session_state.deviation_history.append(f"逸脱と判断された発話：{counselor_reply}")
+                            print(f"逸脱と判断された発話：{counselor_reply}")
                         else:
                             # 2回生成しても発話シナリオから逸脱していた場合は、シナリオ通りの発話を使用
                             print(f"❌ ターン{st.session_state.counselor_turn+1}: 最大再生成回数に達しました。シナリオ通りの発話を使用します。")
                             st.session_state.deviation_history.append(f"❌ ターン{st.session_state.counselor_turn+1}: 最大再生成回数に達しました。シナリオ通りの発話を使用します。")
                             st.session_state.deviation_history.append(f"逸脱と判断された発話：{counselor_reply}")
+                            print(f"逸脱と判断された発話：{counselor_reply}")
                             counselor_reply = counselor_scenario_message
                 
             # カウンセラーエージェントの発話をストリーム表示
